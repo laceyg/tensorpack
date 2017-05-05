@@ -86,7 +86,7 @@ Directory {} exists! Please either backup/delete it, or use a new directory.""".
 If you're resuming from a previous run you can choose to keep it.""")
             _logger.info("Select Action: k (keep) / b (backup) / d (delete) / n (new):")
         while not action:
-            action = input().lower().strip()
+            action = 'k' #input().lower().strip()
         act = action
         if act == 'b':
             backup_name = dirname + get_time_str()

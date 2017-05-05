@@ -18,7 +18,7 @@ class ModelSaver(Callback):
     Save the model every epoch.
     """
 
-    def __init__(self, keep_recent=10, keep_freq=0.5,
+    def __init__(self, keep_recent=1, keep_freq=96,
                  checkpoint_dir=None,
                  var_collections=tf.GraphKeys.GLOBAL_VARIABLES):
         """
@@ -47,7 +47,7 @@ class ModelSaver(Callback):
             var_list=vars,
             max_to_keep=self.keep_recent,
             keep_checkpoint_every_n_hours=self.keep_freq,
-            write_version=tf.train.SaverDef.V2)
+            write_version=tf.train.SaverDef.V1)
         self.meta_graph_written = False
 
     def _trigger(self):
@@ -133,6 +133,9 @@ class MinSaver(Callback):
         #shutil.copy(path, newname)
         logger.info("Model with {} '{}' saved.".format(
             'maximum' if self.reverse else 'minimum', self.monitor_stat))
+        file = open(os.path.join(logger.LOG_DIR,'Results.txt'),'w')
+        file.write('Minimum ' + self.monitor_stat + ' at epoch ' + str(self.trainer.epoch_num) + ': ' + str(self.min) + '\n')
+        file.close()
 
 
 class MaxSaver(MinSaver):

@@ -66,8 +66,10 @@ class ILSVRCMeta(object):
         Returns:
             list: list of (image filename, label)
         """
-        assert name in ['train', 'val', 'test']
-        fname = os.path.join(self.dir, name + '.txt')
+        #assert name in ['train', 'val', 'test']
+        fname = os.path.join(self.dir, name)
+        print 'Using image list: ', fname
+        #fname = os.path.join(self.dir, name + '.txt')
         assert os.path.isfile(fname)
         with open(fname) as f:
             ret = []
@@ -101,7 +103,7 @@ class ILSVRC12(RNGDataFlow):
     Produces uint8 ILSVRC12 images of shape [h, w, 3(BGR)], and a label between [0, 999],
     and optionally a bounding box of [xmin, ymin, xmax, ymax].
     """
-    def __init__(self, dir, name, meta_dir=None, shuffle=None,
+    def __init__(self, dir, name, file_name, meta_dir=None, shuffle=None,
                  dir_structure='original', include_bb=False):
         """
         Args:
@@ -150,12 +152,13 @@ class ILSVRC12(RNGDataFlow):
         assert os.path.isdir(dir), dir
         self.full_dir = os.path.join(dir, name)
         self.name = name
+        self.file_name = file_name
         assert os.path.isdir(self.full_dir), self.full_dir
         if shuffle is None:
             shuffle = name == 'train'
         self.shuffle = shuffle
         meta = ILSVRCMeta(meta_dir)
-        self.imglist = meta.get_image_list(name)
+        self.imglist = meta.get_image_list(file_name)
         self.dir_structure = dir_structure
         self.synset = meta.get_synset_1000()
 
